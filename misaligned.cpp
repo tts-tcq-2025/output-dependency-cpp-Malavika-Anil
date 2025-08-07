@@ -1,45 +1,95 @@
+Final Code :
+ 
 #include <iostream>
-#include <cassert>
-#include <sstream>
-#include <string>
+
 #include <vector>
 
-extern int printColorMap();
+#include <string>
 
-void testPrintColorMap() {
-    std::cout << "\nPrint color map test\n";
-    std::stringstream buffer;
-    auto* orig = std::cout.rdbuf(buffer.rdbuf());
+#include <cassert>
+ 
+std::vector<std::string> getColorMap() {
 
-    int result = printColorMap();
+    const char* majorColor[] = {"White", "Red", "Black", "Yellow", "Violet"};
 
-    std::cout.rdbuf(orig);
+    const char* minorColor[] = {"Blue", "Orange", "Green", "Brown", "Slate"};
 
-    const std::vector<std::string> major = {"White", "Red", "Black", "Yellow", "Violet"};
-    const std::vector<std::string> minor = {"Blue", "Orange", "Green", "Brown", "Slate"};
+    std::vector<std::string> colorMap;
 
-    std::string line;
-    int count = 0;
-    while (std::getline(buffer, line)) {
-        if (line.empty()) continue;
-        std::istringstream iss(line);
-        int idx;
-        std::string maj, min;
-        char sep1, sep2;
-        
-        bool ok = (iss >> idx >> sep1 >> sep2 >> maj >> sep1 >> min);
-        assert(ok && "Line parsing failed");
+    for(int i = 0; i < 5; i++) {
 
-        int i = idx / 5;
-        int j = idx % 5;
-        assert(maj == major[i] && "Major color mismatch");
-        assert(min == minor[j] && "Minor color mismatch");
+        for(int j = 0; j < 5; j++) {
 
-        ++count;
+            std::string entry = std::to_string(i * 5 + j) + " | " + majorColor[i] + " | " + minorColor[i];
+
+            colorMap.push_back(entry);
+
+        }
+
     }
 
-    assert(count == 25 && "Unexpected total line count");
-    assert(result == 25 && "Return value should be 25");
+    return colorMap;
 
-    std::cout << "All is well (maybe!)\n";
 }
+ 
+void testPrintColorMap() {
+
+    std::cout << "\nPrint color map test\n"; 
+
+    std::vector<std::string> colorMap = getColorMap();
+ 
+    assert(colorMap[0] == "0 | White | Blue");  
+
+    assert(colorMap[1] == "1 | White | Orange");
+
+    assert(colorMap[2] == "2 | White | Green");
+
+    assert(colorMap[3] == "3 | White | Brown");
+
+    assert(colorMap[4] == "4 | White | Slate");
+
+    assert(colorMap[5] == "5 | Red | Blue");
+
+    assert(colorMap[6] == "6 | Red | Orange"); 
+
+    assert(colorMap[7] == "7 | Red | Green");  
+
+    assert(colorMap[8] == "8 | Red | Brown");
+
+    assert(colorMap[9] == "9 | Red | Slate");
+
+    assert(colorMap[10] == "10 | Black | Blue");
+
+    assert(colorMap[11] == "11 | Black | Orange"); 
+
+    assert(colorMap[12] == "12 | Black | Green");  
+
+    assert(colorMap[13] == "13 | Black | Brown");
+
+    assert(colorMap[14] == "14 | Black | Slate");
+
+    assert(colorMap[15] == "15 | Yellow | Blue");
+
+    assert(colorMap[16] == "16 | Yellow | Orange");  
+
+    assert(colorMap[17] == "17 | Yellow | Green");  
+
+    assert(colorMap[18] == "18 | Yellow | Brown");
+
+    assert(colorMap[19] == "19 | Yellow | Slate");
+
+    assert(colorMap[20] == "20 | Violet | Blue");
+
+    assert(colorMap[21] == "21 | Violet | Orange");  
+
+    assert(colorMap[22] == "22 | Violet | Green");  
+
+    assert(colorMap[23] == "23 | Violet | Brown");
+
+    assert(colorMap[24] == "24 | Violet | Slate");
+ 
+    std::cout << "All is well (maybe!)\n";
+
+}
+ 
+ 
