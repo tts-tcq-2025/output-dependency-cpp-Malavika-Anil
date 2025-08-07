@@ -25,7 +25,7 @@ void testPrintColorMap() {
     auto colorMap = getColorMap();
     assert(colorMap.size() == 25);
 
-    // Spot-check a few entries to validate correctness
+   
     assert(colorMap[0] == "0 | White | Blue");
     assert(colorMap[4] == "4 | White | Slate");
     assert(colorMap[5] == "5 | Red | Blue");
@@ -38,3 +38,4 @@ int main() {
     testPrintColorMap();
     return 0;
 }
+
