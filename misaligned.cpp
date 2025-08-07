@@ -1,31 +1,51 @@
 #include <iostream>
-#include <assert.h>
+#include <cassert>
+#include <sstream>
+#include <string>
+#include <vector>
 
-int printColorMap(int &totalPairs) {
-    const char* majorColor[] = {"White", "Red", "Black", "Yellow", "Violet"};
-    const char* minorColor[] = {"Blue", "Orange", "Green", "Brown", "Slate"};
-    int count = 0;
-    for (int i = 0; i < 5; i++) {
-        for (int j = 0; j < 5; j++) {
-            std::cout << count << " | " << majorColor[i] << " | " << minorColor[j] << "\n";
-            count++;
-        }
-    }
-    totalPairs = count;
-    return 0;  
-}
+extern int printColorMap(); 
 
 void testPrintColorMap() {
     std::cout << "\nPrint color map test\n";
-    int total = 0;
-    int ret = printColorMap(total);
-    
-    assert(total == 25);
-    assert(ret == 0);
-    std::cout << "All is well (maybe!)\n";
-}
 
-int main() {
-    testPrintColorMap();
-    return 0;
+
+    std::stringstream buffer;
+    std::streambuf *orig = std::cout.rdbuf(buffer.rdbuf());
+
+    int result = printColorMap();
+
+    std::cout.rdbuf(orig);
+
+
+    const std::vector<std::string> major = {"White","Red","Black","Yellow","Violet"};
+    const std::vector<std::string> minor = {"Blue","Orange","Green","Brown","Slate"};
+
+   
+    std::string line;
+    int lineCount = 0;
+    while (std::getline(buffer, line)) {
+        if (line.empty()) continue;
+      
+        int idx;
+        char pipe;
+        std::string maj, min;
+        std::istringstream iss(line);
+        iss >> idx >> pipe >> pipe >> maj >> pipe >> min;
+       
+        int i = idx / 5;
+        int j = idx % 5;
+        std::string expectedMaj = major[i];
+        std::string expectedMin = minor[j];
+       
+        assert(maj == expectedMaj && "Major color mismatch");
+        assert(min == expectedMin && "Minor color mismatch");
+        lineCount++;
+    }
+
+   
+    assert(lineCount == 25 && "Unexpected number of lines");
+    assert(result == 25 && "Return value should be 25");
+
+    std::cout << "All is well (maybe!)\n";
 }
